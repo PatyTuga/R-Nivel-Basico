@@ -40,19 +40,25 @@ list.files()
 data_txt1 <- read.table(file = "data_read.txt",sep = "\t", dec = ",", header = TRUE)
 str(data_txt1)
 View(data_txt1)
-
+attributes(data_txt1)#atributos de data frame es names,rownames,colnames y la clase
 names(data_txt1)
 class(data_txt1)
 dim(data_txt1)
 ncol(data_txt1)
 nrow(data_txt1)
 
-summary(data_txt1)
+summary(data_txt1)#resumen estadistico de todas la variables que dispone la data
+#summary es generica se puede hacer un summary de un factor o de otras 
+str(data_txt1)
+#R transforma las variables categoricas a factores por default
 
+#stringASFACTORS retorna las variables como factor si es igual a tru, caracter caso contrario.
 # Variables categóricas como character
-data_txt2 <- read.table(file = "data_read.txt",sep = "\t", dec = ",", 
-                       header = TRUE, stringsAsFactors = FALSE)
+data_txt2 <- read.table(file = "data_read.txt",sep = "\t", dec = "," ,
+                         header = TRUE, stringsAsFactors = FALSE)
+#se tiene a dos reglones, se subraya y mando a correr
 str(data_txt2)
+
 
 
 # archivo formato csv
@@ -68,16 +74,17 @@ nrow(data_csv)
 
 summary(data_csv)
 
+#read.csv es una funcion creada para leer estos archivos y ya tiene:
 # sep = ",", dec = "."
 data_csv1 <- read.csv(file = "data_read.csv")
 str(data_csv1)
 
-data_csv2 <- read.csv(file = "data_read.csv",sep = ",", dec = ".", header = TRUE)
+data_csv2 <- read.csv2(file = "data_read.csv",sep = ",", dec = ".", header = TRUE)
 str(data_csv2)
 
 
 # archivo formato xlsx
-# install.packages("readxl", dependencies = TRUE)
+#install.packages("readxl", dependencies = TRUE)
 library(readxl)
 ls("package:readxl")
 # lista de las hojas del libro "data_read.xlsx"
@@ -85,19 +92,20 @@ excel_sheets(path = file.path(wd1, "data_read.xlsx"))
 
 data_xlsx <- read_excel("data_read.xlsx",sheet = "datos",col_names = TRUE, na="")
 str(data_xlsx)
-
+View(data_xlsx)
+#as.factor() de caracter a factor
 
 
 # archivos spss formato .sav
-# install.packages("foreign", dependencies = TRUE)
+#install.packages("foreign", dependencies = TRUE)
 library(foreign)
 ls("package:foreign")
 system.time(data_sav1 <- read.spss("data_read.sav", use.value.labels = TRUE, 
                       to.data.frame = TRUE))
+#use.value.labels = TRUE cambia a factor 
 str(data_sav1)
 
-
-# install.packages("haven", dependencies = TRUE)
+#install.packages("haven", dependencies = TRUE)
 # spss: read_spss(), sas: read_sas(), stata: read_dta()
 library(haven)
 ls("package:haven")
@@ -105,6 +113,7 @@ data_sav2 <- read_spss("data_read.sav")
 str(data_sav2)
 
 ##--------- Comparación foreign y haven:
+#system.time comparo el tiempo
 # foreign
 system.time(data_sav1 <- read.spss("data_read.sav", use.value.labels = TRUE, 
                                    to.data.frame = TRUE))
@@ -115,6 +124,12 @@ system.time(data_sav2 <- read_spss("data_read.sav"))
 ## Descargar archivos desde Dropbox
 install.packages("repmis", dependencies = TRUE)
 library(repmis)
+# ME SALE ESTO Y PONGO LA Y en mayuscula
+#The R.cache package needs to create a directory that will hold cache files. It is convenient to use one 
+#in the user's home directory, because it remains also after restarting R. 
+#Do you wish to create the '~/.Rcache/' directory? If not, a temporary directory 
+#(C:\Users\SONY\AppData\Local\Temp\RtmpSSauoX/.Rcache) that is specific to this R session will be used.
+#[Y/n]: Y
 ls("package:repmis")
 data_dbx <- source_DropboxData(file = "data_read.txt", key="mk3y6070r51f9su", sep="\t",
                                header = TRUE)
@@ -124,12 +139,14 @@ str(data_dbx)
 ## Descargar archivos desde tablas html
 library(RCurl)
 library(XML)
-# install.packages("RCurl", dependencies = TRUE)
-# install.packages("XML", dependencies = TRUE)
+#install.packages("RCurl", dependencies = TRUE)
+#install.packages("XML", dependencies = TRUE)
 # http://www.sbs.gob.ec/practg/sbs_index?vp_art_id=&vp_tip=6&vp_buscr=/practg/pk_cons_bdd.p_bal_entdd_finnc
 cod_inst=1028
 cod_mes=11
 cod_anio=2010
+paste("curso","R","basico","1",1:5)
+paste("curso","R","basico","1",sep="")
 base_url <- paste('http://www.sbs.gob.ec/practg/pk_cons_bdd.p_bal_entdd_finnc?vp_cod_tip_instt=3&vp_cod_instt=',
                   cod_inst,'&vp_anio=', cod_anio, '&vp_mes=', cod_mes, '&vp_cod_tip_catlg=14')
 table_url <- readHTMLTable(base_url)
@@ -171,7 +188,7 @@ View(edad)
 typeof(edad)
 length(edad)
 attributes(edad)
-class(edad)
+class(edad)#en realidad no tiene clase
 
 is.atomic(edad)
 is.integer(edad)
@@ -182,10 +199,13 @@ is.list(edad)
 # obtener los elementos 5, 8, 10 de edad y asignar a edad1
 edad1 <- edad[c(5,8,10)]
 length(edad1)
-
+edad1
 # obtener los 50 primeros elementos de edad y asignar a edad1
 edad1 <- edad[1:50]
 length(edad1)
+edad1
+
+# con -(menos) se elimina la fila o columna 
 # eliminar el primer elemento de edad y asignar a edad1
 edad1 <- edad[-1]
 length(edad)
@@ -195,20 +215,23 @@ edad1 <- edad[-c(1,25,51)]
 length(edad)
 length(edad1)
 # eliminar los primeros 1000 elementos de edad y asignar a edad1
-edad1 <- edad[-c(1,25,51)]
+edad1 <- edad[-c(1:1000)]
 length(edad)
 length(edad1)
 
 # eliminar los elementos iguales a 24 de edad y asignar a edad1
 edad==24
 edad1 <- edad[edad==24]
+edad1
+
 # edad1 es constante?
-min(edad1)==max(edad1)
+min(edad1)==max(edad1)#si el min=max, es constante
 length(edad1)
 
 edad!=24
 !edad==24
 edad1 <- edad[edad!=24]
+edad1
 length(edad1)
 mean(edad1)
 min(edad1)
@@ -245,8 +268,8 @@ edad1 <- edad
 edad1<18 | edad > 65
 edad1[edad1<18 | edad > 65] <- "fuera de rango"
 str(edad1)
-min(edad1)
-max(edad1)
+min(edad1)#no tiene sentido pero si lo hace 
+max(edad1)#no tiene sentido pero si lo hace 
 # obtener la media?
 mean(edad1)
 edad2 <- as.numeric(edad1)
@@ -261,7 +284,7 @@ perd <- is.na(edad)
 typeof(perd)
 str(perd)
 # todos los datos de edad son perdidos?
-all(perd)
+all(perd)   #si todas las componentes de un vector logico son true, es decir todos los datos estan perdidos
 # existe al menos un dato perdido?
 any(perd)
 # cuente los datos perdidos
@@ -281,8 +304,9 @@ tipviv <- data_txt[,"Vivienda"]
 str(tipviv)
 View(tipviv)
 typeof(tipviv)
-mean(tipviv)
+mean(tipviv)#no tiene sentido es variable gactor
 length(tipviv)
+levels(tipviv)
 attributes(tipviv)
 class(tipviv)
 
@@ -438,7 +462,7 @@ barplot(table(tipviv), xlab = "Vivienda", ylab="Frecuencia", main="Diagrama de b
 
 
 # multiples graficos
-par(mfrow=c(2,2))
+par(mfrow=c(2,2))#parametros ggraficos / malla que se llena por filas , mfcol para llenar columnas
 hist(edad,breaks = 50, xlab = "Edad", ylab="Frecuencia", main="Histograma de Edad",
      col="steelblue", border="gray60")
 boxplot(edad, xlab = "", ylab="Edad", main="Diag cajas de Edad",
